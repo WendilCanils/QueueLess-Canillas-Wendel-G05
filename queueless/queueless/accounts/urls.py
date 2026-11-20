@@ -1,19 +1,10 @@
-from django.contrib.auth import views as auth_views
 from django.urls import path
 
-from .forms import LoginForm
-from .views import ProfileUpdateView, SignUpView
+from .views import ProfileUpdateView, RoleLoginView, SignOutView, SignUpView
 
 urlpatterns = [
     path("signup/", SignUpView.as_view(), name="signup"),
-    path(
-        "login/",
-        auth_views.LoginView.as_view(
-            template_name="accounts/login.html",
-            authentication_form=LoginForm,
-        ),
-        name="login",
-    ),
-    path("logout/", auth_views.LogoutView.as_view(), name="logout"),
+    path("login/", RoleLoginView.as_view(), name="login"),
+    path("logout/", SignOutView.as_view(), name="logout"),
     path("profile/", ProfileUpdateView.as_view(), name="profile"),
 ]

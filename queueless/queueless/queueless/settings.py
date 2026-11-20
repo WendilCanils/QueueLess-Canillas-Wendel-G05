@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
+    'dashboard',
 ]
 
 MIDDLEWARE = [
@@ -129,5 +130,5 @@ MAILERS = {
 
 
 LOGIN_URL = "login"
-LOGIN_REDIRECT_URL = "profile"
+LOGIN_REDIRECT_URL = "dashboard:home"
 LOGOUT_REDIRECT_URL = "login"

@@ -7,11 +7,15 @@
     <div class="card shadow-sm">
       <div class="card-body p-4">
         <h2 class="h4 mb-1">My Profile</h2>
-        <p class="text-muted">Signed in as <strong>{{ user.username }}</strong></p>
+        <p class="text-muted">
+          Signed in as <strong>{{ user.username }}</strong>
+          <span class="badge bg-secondary ms-1">{{ user.profile.get_role_display }}</span>
+        </p>
         <form method="post" novalidate>
           {% csrf_token %}
           {% include "accounts/_form_fields.html" %}
           <button type="submit" class="btn btn-primary">Save changes</button>
+          <a href="{% url 'dashboard:home' %}" class="btn btn-outline-secondary">Back to dashboard</a>
         </form>
       </div>
     </div>
