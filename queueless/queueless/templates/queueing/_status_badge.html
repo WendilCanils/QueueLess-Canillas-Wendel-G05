@@ -1,0 +1,5 @@
+{% if ticket.status == "waiting" %}<span class="badge bg-warning text-dark">Waiting</span>
+{% elif ticket.status == "serving" %}<span class="badge bg-primary">Serving</span>
+{% elif ticket.status == "completed" %}<span class="badge bg-success">Completed</span>
+{% elif ticket.status == "cancelled" %}<span class="badge bg-secondary">Cancelled</span>
+{% else %}<span class="badge bg-danger">No-show</span>{% endif %}

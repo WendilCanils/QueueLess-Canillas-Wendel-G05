@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Manage Queue | QueueLess{% endblock %}
+
+{% block content %}
+{% include "queueing/_staff_nav.html" with active="queue" %}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+  <div>
+    <h2 class="h4 mb-0">{{ office.name }} queue</h2>
+    <small class="text-muted">Today, {% now "F j, Y" %}</small>
+  </div>
+  <form method="post" action="{% url 'queueing:call_next' %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-success" {% if not waiting or my_serving %}disabled{% endif %}>Call next student</button>
+  </form>
+</div>
+
+<div class="card shadow-sm mb-4 border-primary">
+  <div class="card-header bg-primary text-white">Now serving (you)</div>
+  {% for t in my_serving %}
+  <div class="card-body d-flex flex-wrap justify-content-between align-items-center gap-3">
+    <div>
+      <div class="display-6 fw-bold">{{ t.code }}</div>
+      <div>{{ t.student.get_full_name|default:t.student.username }} | {{ t.service.name }}</div>
+      <small class="text-muted">{{ t.purpose }}</small>
+    </div>
+    <div class="d-flex gap-2">
+      <form method="post" action="{% url 'queueing:ticket_complete' t.pk %}">{% csrf_token %}<button type="submit" class="btn btn-success">Complete</button></form>
+      <form method="post" action="{% url 'queueing:ticket_no_show' t.pk %}" onsubmit="return confirm('Mark this student as no-show?');">{% csrf_token %}<button type="submit" class="btn btn-outline-danger">No-show</button></form>
+    </div>
+  </div>
+  {% empty %}
+  <div class="card-body text-muted">You are not serving anyone. Click Call next student.</div>
+  {% endfor %}
+</div>
+
+{% if others_serving %}
+<div class="alert alert-secondary">
+  Also being served by other staff:
+  {% for t in others_serving %}<strong>{{ t.code }}</strong>{% if not forloop.last %}, {% endif %}{% endfor %}
+</div>
+{% endif %}
+
+<div class="card shadow-sm mb-4">
+  <div class="card-header">Waiting ({{ waiting|length }})</div>
+  <div class="table-responsive">
+    <table class="table align-middle mb-0">
+      <thead class="table-light"><tr><th>#</th><th>Ticket</th><th>Student</th><th>Service</th><th>Purpose</th><th>Taken</th></tr></thead>
+      <tbody>
+        {% for t in waiting %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td class="fw-bold">{{ t.code }}</td>
+          <td>{{ t.student.get_full_name|default:t.student.username }}</td>
+          <td>{{ t.service.name }}</td>
+          <td>{{ t.purpose }}</td>
+          <td>{{ t.created_at|time:"g:i A" }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6" class="text-center text-muted py-3">No students are waiting.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card shadow-sm">
+  <div class="card-header">Recently finished today</div>
+  <ul class="list-group list-group-flush">
+    {% for t in finished %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <span><strong>{{ t.code }}</strong> | {{ t.student.get_full_name|default:t.student.username }} | {{ t.service.name }}</span>
+      {% include "queueing/_status_badge.html" with ticket=t %}
+    </li>
+    {% empty %}
+    <li class="list-group-item text-muted">Nothing finished yet today.</li>
+    {% endfor %}
+  </ul>
+</div>
+
+<script>setTimeout(function () { location.reload(); }, 20000);</script>
+{% endblock %}
