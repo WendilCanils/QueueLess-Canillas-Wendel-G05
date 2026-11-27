@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Delete Service | QueueLess{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h2 class="h4 mb-3">Delete "{{ service.name }}"?</h2>
+        <p class="text-muted">Services that already have tickets cannot be deleted. Mark them as unavailable instead.</p>
+        <form method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Yes, delete</button>
+          <a href="{% url 'queueing:service_list' %}" class="btn btn-outline-secondary">Keep it</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,7 @@
+<ul class="nav nav-pills mb-4">
+  <li class="nav-item"><a class="nav-link {% if active == 'dashboard' %}active{% endif %}" href="{% url 'dashboard:staff' %}">Dashboard</a></li>
+  <li class="nav-item"><a class="nav-link {% if active == 'queue' %}active{% endif %}" href="{% url 'queueing:staff_queue' %}">Manage Queue</a></li>
+  <li class="nav-item"><a class="nav-link {% if active == 'records' %}active{% endif %}" href="{% url 'queueing:staff_records' %}">Queue Records</a></li>
+  <li class="nav-item"><a class="nav-link {% if active == 'services' %}active{% endif %}" href="{% url 'queueing:service_list' %}">Services</a></li>
+  <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}">My Profile</a></li>
+</ul>
